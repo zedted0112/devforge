@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   auth:
     build:
@@ -7,11 +5,12 @@ services:
     container_name: auth-service
     ports:
       - "3001:3001"
-    volumes:
-      - ./auth:/app
+    # ❌ Do not use volumes during debugging, can break node_modules
+    # volumes:
+    #   - ./auth:/app
     environment:
       - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=your_jwt_secret
+      - JWT_SECRET=devforge_super_secret_key
     depends_on:
       - redis
 
