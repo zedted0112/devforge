@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  auth:
+    build:
+      context: ./auth
+    container_name: auth-service
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./auth:/app
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=your_jwt_secret
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
