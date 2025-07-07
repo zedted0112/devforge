@@ -8,8 +8,10 @@ interface LoginPayload {
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
-  userId: string;
-  email: string;
+  user: {
+    id: number;
+    email: string;
+  };
 }
 
 // ✅ Tell Axios the expected return shape

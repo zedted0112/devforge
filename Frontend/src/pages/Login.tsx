@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { login } from '../api/auth';
 import useAuthStore from '../stores/authStore';
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const setAuthData = useAuthStore((state) => state.setAuthData);
+  const navigate = useNavigate();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -16,10 +19,21 @@ const Login: React.FC = () => {
       setAuthData({
         accessToken: data.accessToken,
         refreshToken: data.refreshToken,
-        userId: data.userId,
-        email: data.email,
+        userId: String(data.user.id),
+        email: data.user.email,
+
+
+
       });
+
+      console.log(data);
+      navigate('/dashboard');
+
+
+
+
       // TODO: redirect to /dashboard after success
+    
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed');
     }

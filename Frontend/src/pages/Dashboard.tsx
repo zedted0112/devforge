@@ -11,12 +11,15 @@ const Dashboard: React.FC = () => {
     navigate('/login');
   };
 
+  // Extract username from email before "@"
+  const username = email ? email.split('@')[0] :'luffy';
+console.log(username);
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
       <h1 className="text-4xl font-bold text-indigo-700 mb-4 tracking-wide">DevForge</h1>
 
       <div className="w-full max-w-md p-6 bg-white bg-opacity-90 shadow-xl rounded-xl text-center">
-        <h2 className="text-2xl font-semibold mb-4">Welcome, Commander Luffy</h2>
+        <h2 className="text-2xl font-semibold mb-4">Welcome, {username}</h2>
         <p className="mb-6 text-gray-600">Logged in as <span className="font-medium">{email}</span></p>
 
         <button
