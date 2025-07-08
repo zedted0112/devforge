@@ -4,10 +4,10 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const projectRoutes = require("./src/routes/projectRoutes");
 // 👇 Add this line after other imports
-const userRoutes = require('./routes/userRoutes');
+// const userRoutes = require('./routes/userRoutes');
 
 // 👇 After other app.use()
-app.use('/', userRoutes);
+//app.use('/', userRoutes);
 dotenv.config();
 
 const app = express();

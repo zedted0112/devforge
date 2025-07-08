@@ -13,7 +13,8 @@ model Project {
   ownerId     Int
   createdAt   DateTime @default(now())
 
-  owner       User     @relation(fields: [ownerId], references: [id]) // ✅ Add this
+
+ owner       User     @relation(fields: [ownerId], references: [id]) // ✅ Add this
 }
 
 model User {
