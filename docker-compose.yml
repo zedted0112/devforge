@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   auth:
     build:
@@ -5,17 +7,40 @@ services:
     container_name: auth-service
     ports:
       - "3001:3001"
-    # ❌ Do not use volumes during debugging, can break node_modules
-    # volumes:
-    #   - ./auth:/app
     environment:
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET=devforge_super_secret_key
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/devforge_auth
     depends_on:
       - redis
+      - postgres
+
+  project-service:
+    build:
+      context: ./project-service
+    container_name: project-service
+    ports:
+      - "3002:3002"
+      - "5555:5555"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/devforge_project
+      - JWT_SECRET=devforge_super_secret_key
+    depends_on:
+      - postgres
 
   redis:
     image: redis:7-alpine
     container_name: redis
     ports:
       - "6379:6379"
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: devforge_auth
+    ports:
+      - "5432:5432"
