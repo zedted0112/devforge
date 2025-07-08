@@ -21,7 +21,7 @@ services:
     container_name: project-service
     ports:
       - "3002:3002"
-      - "5555:5555"
+      - "5555:5555" 
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/devforge_project
       - JWT_SECRET=devforge_super_secret_key
