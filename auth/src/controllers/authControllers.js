@@ -8,7 +8,12 @@ const {
 const redisClient = require("../config/db");
 
 // Temporary in-memory user storage
-const users = [];
+//const users = [];
+// replacing i with real db
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient(); // ✅ Real PostgreSQL DB
+
+
 
 // ─────────────── Signup ───────────────
 
@@ -21,24 +26,49 @@ exports.signupUser = async (req, res) => {
       return res.status(400).json({ message: "Missing fields" });
     }
 
-    const existingUser = users.find((user) => user.email === email);
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+    // check if user is already exits
+    // const existingUser = users.find((user) => user.email === email);
+    // if (existingUser) {
+    //   return res.status(400).json({ message: "User already exists" });
+    // }
+
+    const existingUser = await prisma.user.findUnique({
+      where :{email}
+    });
+
+    if(existingUser){
+      return res.status(400).json({
+        message:"User already exists"
+      });
     }
+
+
 
     console.log("🔐 Hashing password...");
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log("✅ Password hashed");
 
-    const newUser = {
-      id: users.length + 1,
-      name,
-      email,
-      password: hashedPassword,
-      role: "user",
-    };
+    //old logic for temp temp adding a new user
+    // const newUser = {
+    //   id: users.length + 1,
+    //   name,
+    //   email,
+    //   password: hashedPassword,
+    //   role: "user",
+    // };
 
-    users.push(newUser);
+    // users.push(newUser);
+
+    // new logic to add user
+
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        role: "user",
+      },
+    })
 
     return res.status(201).json({
       message: "Signup successful",
@@ -58,11 +88,19 @@ exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = users.find((u) => u.email === email);
+    //const user = users.find((u) => u.email === email);
+    
+
+    // fetch user from database
+    const user =await prisma.user.findUnique({
+      where:{email},
+    });
+    
     if (!user) {
       return res.status(400).json({ message: "Invalid user. Please sign up." });
     }
 
+    //check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid password" });
@@ -102,7 +140,7 @@ exports.refreshTokenHandler = async (req, res) => {
     return res.status(400).json({ message: "Refresh token missing" });
   }
 
-  console.log("🔐 Verifying with secret:", process.env.REFRESH_TOKEN_SECRET);
+  console.log("🔐 Verifying secret:");
 
   let payload;
   try {

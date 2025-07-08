@@ -11,14 +11,21 @@ exports.createProject = async (req, res) => {
     }
 
     //
-    console.log("Creating project with:", {
-        title,
-        description,
-        ownerId: userId,
-        typeofOwnerId: typeof userId,
-      });
+    // console.log("Creating project with:", {
+    //     title,
+    //     description,
+    //     ownerId: userId,
+    //     typeofOwnerId: typeof userId,
+    //   });
 
+    // stanity check
+    const userExists = await prisma.user.findUnique({
+      where: { id: Number(userId) },
+    });
 
+    if (!userExists) {
+      return res.status(404).json({ message: "User does not exist in DB" });
+    }
 
     const project = await prisma.project.create({
       data: {
