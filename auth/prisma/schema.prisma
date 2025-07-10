@@ -22,5 +22,4 @@ model User {
   role     String    @default("user")
   createdAt DateTime @default(now())
 
-  projects Project[] // Optional: for symmetry
 }

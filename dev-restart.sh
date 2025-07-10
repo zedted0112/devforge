@@ -13,7 +13,7 @@ echo "⏳ Waiting 6s for containers to settle..."
 sleep 6
 
 echo "🔐 Entering project-service container for migration..."
-docker exec -it project-service sh -c "
+docker compose exec project-service sh -c "
   npx prisma migrate dev --name init && \
   echo '✅ DB Migrations Complete.'
 "

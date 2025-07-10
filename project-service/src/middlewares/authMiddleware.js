@@ -12,6 +12,9 @@ exports.authenticate = async (req, res, next) => {
   }
 
   try {
+    console.log("🔐 JWT_SECRET in project-service:", process.env.JWT_SECRET);
+console.log("📦 Incoming token:", token);
+    
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await prisma.user.findUnique({
