@@ -21,7 +21,7 @@ else
 fi
 
 cd "$FOLDER" || { echo "❌ Folder $FOLDER not found"; exit 1; }
-
+ 
 cp ".env.$TARGET" .env || { echo "❌ .env.$TARGET not found in $FOLDER"; exit 1; }
 
 echo "✅ Switched $SERVICE to .env.$TARGET"

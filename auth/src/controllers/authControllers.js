@@ -1,6 +1,8 @@
+//auth/src/controllers/authControllers.js
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const axios = require("axios");
+const prisma = require("../../prisma/client")
 const {
   generateAccessToken,
   generateRefreshToken,
@@ -10,13 +12,11 @@ const redisClient = require("../config/db");
 // Temporary in-memory user storage
 //const users = [];
 // replacing i with real db
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient(); // ✅ Real PostgreSQL DB
 
 
 
 // ─────────────── Signup ───────────────
-
+ console.log("user is being signed up");
 exports.signupUser = async (req, res) => {
   try {
     console.log("📥 Incoming signup:", req.body);
@@ -39,14 +39,18 @@ exports.signupUser = async (req, res) => {
     if(existingUser){
       return res.status(400).json({
         message:"User already exists"
-      });
+      },console.log("user already in datbase"));
     }
+
+    
 
 
 
     console.log("🔐 Hashing password...");
+    // password hashing
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("✅ Password hashed");
+
+    console.log("✅ Password hashed succesfully");
 
     //old logic for temp temp adding a new user
     // const newUser = {
@@ -61,6 +65,7 @@ exports.signupUser = async (req, res) => {
 
     // new logic to add user
 
+    
     const newUser = await prisma.user.create({
       data: {
         name,
@@ -68,7 +73,19 @@ exports.signupUser = async (req, res) => {
         password: hashedPassword,
         role: "user",
       },
-    })
+    },console.log("New user created in Auth-db"));
+
+    
+
+    // sycning with project db passing token to project service
+// new patch now token  is issued only after user login in project
+   
+
+
+
+
+
+
 
     return res.status(201).json({
       message: "Signup successful",
@@ -88,33 +105,56 @@ exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    //const user = users.find((u) => u.email === email);
-    
-
-    // fetch user from database
-    const user =await prisma.user.findUnique({
-      where:{email},
+    const user = await prisma.user.findUnique({
+      where: { email },
     });
-    
+
     if (!user) {
+      console.log("❌ User not found in Auth DB");
       return res.status(400).json({ message: "Invalid user. Please sign up." });
     }
 
-    //check password
+    console.log("✅ User found:", { id: user.id, email: user.email });
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.log("❌ Password mismatch");
       return res.status(400).json({ message: "Invalid password" });
     }
+
+    console.log("🔐 Password matched");
 
     const payload = { id: user.id, email: user.email, role: user.role };
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
+    console.log("🔑 Access Token:", accessToken);
+    console.log("🔄 Refresh Token:", refreshToken);
+
     await redisClient.set(`refresh:${user.id}`, refreshToken, {
-      EX: 7 * 24 * 60 * 60, // 7 days
+      EX: 7 * 24 * 60 * 60,
     });
 
     console.log("✅ Login successful, tokens issued");
+
+    // 🛰 Sync to project-service
+    try {
+      const syncUrl = "http://project-service:3002/api/sync/user";
+      console.log("📡 Syncing to Project Service:", syncUrl);
+
+      const syncResponse = await axios.post(syncUrl,
+        { id: user.id, email: user.email },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      console.log("📬 Sync response from project:", syncResponse.data);
+    } catch (err) {
+      console.error("⚠️ User sync to project-service failed (login):", err.message);
+    }
 
     return res.status(200).json({
       message: "Login successful",
@@ -122,8 +162,9 @@ exports.loginUser = async (req, res) => {
       refreshToken,
       user: { id: user.id, email: user.email },
     });
+
   } catch (err) {
-    console.error("❌ Login error:", err);
+    console.error("❌ Login error:", err.message);
     return res.status(500).json({ message: "Server error during login" });
   }
 };

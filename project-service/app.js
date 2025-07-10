@@ -3,10 +3,10 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const projectRoutes = require("./src/routes/projectRoutes");
-// 👇 Add this line after other imports
-// const userRoutes = require('./routes/userRoutes');
+const syncRoutes = require('./src/routes/syncRoutes');
+const userRoutes = require('./src/routes/userRoutes');
 
-// 👇 After other app.use()
+
 //app.use('/', userRoutes);
 dotenv.config();
 
@@ -17,6 +17,8 @@ app.use(express.json());
 
 app.use("/api/projects", projectRoutes);
 
+app.use('/api/sync', syncRoutes);
+app.use('/api/user', userRoutes);
 app.get("/api/projects/ping", (req, res) => {
   res.send("📡 Project Service is live");
 });
