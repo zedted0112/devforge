@@ -1,69 +1,53 @@
-# DevForge 🛠️
+# DevForge
 
-DevForge is a developer-focused project management backend system, built from scratch using modern Node.js microservices.
-
-This project was built as a real-world backend portfolio system to demonstrate my skills in authentication, inter-service communication, and database integrity using Prisma.
-
----
-
-## 🧩 Microservices
-
-| Service         | Description                              | Tech Stack                   |
-|----------------|------------------------------------------|------------------------------|
-| `auth-service` | Handles signup/login, JWT, Redis, tokens | Node.js, Express, Prisma, Redis |
-| `project-service` | Manages project data linked to users     | Node.js, Express, Prisma, PostgreSQL |
+DevForge is a backend project management system built with Node.js microservices.  
+It was developed as a real-world portfolio project to practice scalable architecture, JWT auth, inter-service sync, and DB integrity using Prisma and Docker.
 
 ---
 
-## 🔐 Auth Flow
+## Microservices
 
-- JWT (access + refresh) issued at login
+| Service           | Description                                    | Tech Stack                             |
+|------------------|------------------------------------------------|----------------------------------------|
+| `auth-service`    | Handles signup/login, JWT, Redis, tokens       | Node.js, Express, Prisma, Redis        |
+| `project-service` | Manages project data linked to users           | Node.js, Express, Prisma, PostgreSQL   |
+
+---
+
+## Authentication Flow
+
+- JWT (access + refresh) issued on login
 - Redis used to store/rotate refresh tokens
-- Token is verified via middleware for protected routes
-- Auth service syncs users to project-service via Axios
+- Token is verified using middleware before accessing protected routes
+- Auth service syncs new users to project-service using Axios and JWT
+- Project-service validates and stores synced users
 
 ---
 
-## ⚙️ How to Run Locally
+## Architecture Notes
 
-```bash
-# 1. Start Docker containers
-docker-compose up --build
+- Dockerized services with internal communication
+- Environment switching via `.env` scripts
+- Prisma used for schema management and DB migrations
+- Log-driven debugging to trace every step from login to sync
 
-# 2. Auth service runs at:
-http://localhost:3001
+---
 
-# 3. Project service runs at:
-http://localhost:3002
+## Status: Phase 1 Complete
 
+- ✅ Auth system working end-to-end
+- ✅ User sync between services working
+- ✅ Scoped project creation working via protected routes
 
-Features
-	•	JWT + Redis secure auth system
-	•	Token verification middleware with route-based bypass logic
-	•	Full project creation flow after login
-	•	Sync new users across services
-	•	Dockerized for isolation and clean dev setup
+---
 
-devforge/
-│
-├── auth/
-│   └── src/
-│       ├── controllers/
-│       ├── routes/
-│       ├── middlewares/
-│       └── utils/
-│
-├── project-service/
-│   └── src/
-│       ├── controllers/
-│       ├── middlewares/
-│       └── routes/
-│
-├── docker/
-│   └── docker-compose.yml
-├── README.md
+## Scripts Included
 
-🚀 Built By
+- `scripts/dev-restart.sh` — Restart all services
+- `scripts/auth-service-restart.sh` — Restart only auth
+- `scripts/switch-env.sh` — Environment toggler
 
-Nitin Rana
-Built from the ground up to learn & demonstrate real backend service architecture.
+---
+
+Built and maintained by **@HimalayanCoder (Nitin Rana)**  
+Feel free to fork, star, or suggest improvements.
