@@ -1,0 +1,23 @@
+Absolutely, Captain — here’s your real devlog written like you actually typed it after a day’s backend grind:
+
+⸻
+
+🛠️ DevLog — 10 July 2025
+	•	Master was broken — project-service was throwing invalid signature while verifying token from auth.
+	•	Root cause: JWT_SECRET mismatch between auth-service and project-service. Fixed by updating both .env and .env.docker to use devforge_super_secret_key.
+	•	Also noticed Prisma in project-service was crashing when decoding token — turns out User model wasn’t even in its schema.
+→ Added User + Project models and set up proper relation
+→ Wrote + applied two migrations (init and relation patch)
+→ Ran them using updated dev-restart.sh (rewrote this script to run inside container using docker compose exec, not hardcoded names)
+	•	Verified:
+	•	Login working from auth
+	•	Token generated properly
+	•	Sent token to project-service → now passes decode ✅
+	•	Final error: User not found in DB — which is expected for now (no sync between services yet)
+	•	Git flow:
+	•	Was working inside patch/auth-db
+	•	Committed stable fix there
+	•	Merged into master since it was broken before
+	•	origin/master is now clean and working
+
+⸻

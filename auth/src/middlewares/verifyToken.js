@@ -1,54 +1,54 @@
+///Users/himalayancoder/Projects and learnings/Projects/devforge/auth/src/middlewares/verifyToken.js
+
 const jwt = require("jsonwebtoken");
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../../prisma/client"); // 📦 DB client (Prisma)
+
+const isDev = process.env.NODE_ENV !== "production"; // ⚙️ Toggle dev logs
 
 /**
- * Middleware to verify JWT token and attach the authenticated user to the request.
- * 
- * - Verifies the token's validity and decodes it.
- * - Checks if the user exists in the database (extra safety).
- * - Attaches the full user object to `req.user` for downstream usage.
+ * 🔐 Verify JWT token and attach user to request.
+ * - Decodes token
+ * - Checks user in DB
+ * - Blocks if invalid/missing
  */
 const verifyToken = async (req, res, next) => {
-  const header = req.headers["authorization"];
+  // 🛡️ Step 1: Extract token from headers
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
-  // 1. Check if the Authorization header exists
-  if (!header) {
+  if (isDev) console.log("🛡️ [verifyToken] Auth Header:", authHeader);
+
+  if (!token) {
+    // ❌ No token? Abort with 401
+    if (isDev) console.log("❌ No token provided.");
     return res.status(401).json({ message: "Auth token missing" });
   }
 
-  // 2. Extract Bearer token from header
-  const token = header.split(" ")[1];
-
   try {
-    // 3. Decode and verify token using secret
+    // 🔍 Step 2: Decode token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (isDev) console.log("✅ Token decoded:", decoded);
 
-    // 4. Optional Logging (only during development)
-    if (process.env.NODE_ENV !== "production") {
-      console.log("🔐 Token decoded:", decoded);
-    }
-
-    /**
-     * 5. Critical DB Check:
-     * Ensures the user tied to the token still exists in the database.
-     * This prevents access from deleted or invalid users.
-     */
+    // 🔎 Step 3: Fetch user from DB
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
     });
 
     if (!user) {
-      return res.status(403).json({ message: "User not found in DB" });
+      // ❌ User not in DB? Block access
+      if (isDev) console.log("❌ User not found in DB");
+      return res.status(403).json({ message: "User not found" });
     }
 
-    // 6. Attach the verified user object to request for downstream use
+    // ✅ Success: Attach user to request
     req.user = user;
-    next();
+    if (isDev) console.log("👤 Authenticated User:", user.email);
+
+    next(); // 🎯 Go to next middleware/controller
   } catch (err) {
-    return res.status(403).json({
-      message: "Invalid or expired token",
-    });
+    // 🧨 Any error (e.g., expired token)
+    if (isDev) console.error("🚨 Token verification failed:", err.message);
+    return res.status(403).json({ message: "Invalid or expired token" });
   }
 };
 

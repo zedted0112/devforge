@@ -1,0 +1,121 @@
+.
+├── analytics
+│   ├── Dockerfile
+│   ├── README.md
+│   └── src
+├── auth
+│   ├── Dockerfile
+│   ├── docs
+│   │   ├── day 10.nd
+│   │   ├── day 3.md
+│   │   ├── day 4.md
+│   │   ├── day 5.md
+│   │   ├── day 6 -Frontend.md
+│   │   └── day 6.md
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── prisma
+│   │   ├── client.js
+│   │   └── schema.prisma
+│   ├── README.md
+│   └── src
+│       ├── app.js
+│       ├── config
+│       │   └── db.js
+│       ├── controllers
+│       │   ├── authControllers.js
+│       │   └── userControllers.js
+│       ├── generated
+│       │   └── prisma
+│       ├── middlewares
+│       │   ├── validateAuthInput.js
+│       │   └── verifyToken.js
+│       ├── routes
+│       │   ├── authRoutes.js
+│       │   ├── protected.js
+│       │   └── userRoutes.js
+│       └── utils
+│           └── tokenUtils.js
+├── devforge_tree.txt
+├── docker
+│   └── init
+│       └── init.sql
+├── docker-compose.yml
+├── Frontend
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── public
+│   │   └── vite.svg
+│   ├── README.md
+│   ├── src
+│   │   ├── api
+│   │   │   ├── auth.ts
+│   │   │   └── axiosClient.ts
+│   │   ├── App.css
+│   │   ├── App.tsx
+│   │   ├── assets
+│   │   │   └── react.svg
+│   │   ├── components
+│   │   │   └── PrivateRoute.tsx
+│   │   ├── index.css
+│   │   ├── main.tsx
+│   │   ├── pages
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── Landing.tsx
+│   │   │   ├── Login.tsx
+│   │   │   └── Signup.tsx
+│   │   ├── stores
+│   │   │   └── authStore.ts
+│   │   └── vite-env.d.ts
+│   ├── tailwind.config.js
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   └── vite.config.ts
+├── gateway
+│   ├── Dockerfile
+│   ├── README.md
+│   └── src
+├── jobs-worker
+│   ├── Dockerfile
+│   ├── README.md
+│   └── src
+├── notifications
+│   ├── Dockerfile
+│   ├── README.md
+│   └── src
+├── package-lock.json
+├── package.json
+├── project-service
+│   ├── app.js
+│   ├── Dockerfile
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── prisma
+│   │   ├── client.js
+│   │   ├── migrations
+│   │   │   ├── 20250707142155_init
+│   │   │   ├── 20250707153930_add_user_and_project_relation
+│   │   │   └── migration_lock.toml
+│   │   └── schema.prisma
+│   └── src
+│       ├── controllers
+│       │   ├── projectController.js
+│       │   └── userController.js
+│       ├── middlewares
+│       │   └── authMiddleware.js
+│       └── routes
+│           ├── projectRoutes.js
+│           ├── syncRoutes.js
+│           └── userRoutes.js
+├── README.md
+└── scripts
+    ├── auth-service-restart.sh
+    ├── dev-restart.sh
+    ├── project-service-restart.sh
+    └── switch-env.sh
+
+40 directories, 79 files
