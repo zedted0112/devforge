@@ -35,7 +35,16 @@ const Login: React.FC = () => {
       // TODO: redirect to /dashboard after success
     
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
+      const errorMsg = err.response?.data?.message || 'Login failed';
+    
+      setError(errorMsg);
+    
+      // If backend sends specific message for missing user
+      if (errorMsg.toLowerCase().includes('invalid user')) {
+        setTimeout(() => {
+          navigate('/signup');
+        }, 2500); // Show error first, then redirect
+      }
     }
   };
 
