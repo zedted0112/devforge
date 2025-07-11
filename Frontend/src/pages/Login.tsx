@@ -26,7 +26,8 @@ const Login: React.FC = () => {
 
       });
 
-      console.log(data);
+      console.log('Logged in:', data.user.email);
+console.log(' Token:', data.accessToken);
       navigate('/dashboard');
 
 
@@ -40,11 +41,7 @@ const Login: React.FC = () => {
       setError(errorMsg);
     
       // If backend sends specific message for missing user
-      if (errorMsg.toLowerCase().includes('invalid user')) {
-        setTimeout(() => {
-          navigate('/signup');
-        }, 2500); // Show error first, then redirect
-      }
+   
     }
   };
 
@@ -79,6 +76,17 @@ const Login: React.FC = () => {
             Log In
           </button>
         </form>
+
+        
+        <p className="mt-4 text-center text-sm text-gray-600">
+  Don’t have an account?{' '}
+  <button
+    onClick={() => navigate('/signup')}
+    className="text-indigo-600 hover:text-indigo-800 font-medium underline"
+  >
+    Sign up here
+  </button>
+</p>
       </div>
     </div>
   );
