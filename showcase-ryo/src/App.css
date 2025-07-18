@@ -1,0 +1,45 @@
+/* AI-Generated Layout: portfolio */
+.App {
+  text-align: center;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Modern styling for portfolio layout */
+.section-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.section-portfolio {
+  padding: 80px 0;
+  background: #f8f9fa;
+}
+
+.section-about {
+  padding: 80px 0;
+  background: white;
+}
+
+.section-contact {
+  padding: 80px 0;
+  background: #2c3e50;
+  color: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+}

@@ -21,24 +21,29 @@ redisClient.on("connect", () => {
   console.log("✅ Redis connected");
 });
 
-(async () => {
-  try {
-    await redisClient.connect();
+app.get('/health', (req, res) => {
+  res.send('✅ Auth Service Healthy');
+});
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/protected", protectedRoutes);
 
-    app.use((req, res, next) => {
-      req.redis = redisClient;
-      next();
-    });
+module.exports = app;
 
-    app.use("/api/auth", require("./routes/authRoutes"));
-    app.use("/api/protected", protectedRoutes);
-    //app.use('/api/user', userRoutes);
-    const PORT = process.env.PORT || 3001;
-    app.listen(PORT, () => {
-      console.log(`🚀 Auth service running on port ${PORT}`);
-    });
-  } catch (err) {
-    console.error("🔥 Failed to start app:", err);
-    process.exit(1);
-  }
-})();
+if (require.main === module) {
+  (async () => {
+    try {
+      await redisClient.connect();
+      app.use((req, res, next) => {
+        req.redis = redisClient;
+        next();
+      });
+      const PORT = process.env.PORT || 3001;
+      app.listen(PORT, () => {
+        console.log(`🚀 Auth service running on port ${PORT}`);
+      });
+    } catch (err) {
+      console.error("🔥 Failed to start app:", err);
+      process.exit(1);
+    }
+  })();
+}

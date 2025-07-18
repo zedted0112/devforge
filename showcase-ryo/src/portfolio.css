@@ -1,0 +1,21 @@
+/* portfolio section styles */
+.section-portfolio {
+  padding: 60px 0;
+}
+
+.portfolio-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* card-layout styling */
+.section-portfolio.card-layout {
+  /* card-layout specific styles */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .section-portfolio {
+    padding: 40px 0;
+  }
+}
