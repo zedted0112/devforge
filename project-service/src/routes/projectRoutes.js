@@ -1,13 +1,25 @@
+// projectRoutes.js
+
 const express = require("express");
 const router = express.Router();
-const { createProject } = require("../controllers/projectController");
+const {
+  createProject,
+  getAllProjects,
+  getProjectById,
+  updateProject,
+  deleteProject
+} = require("../controllers/projectController");
+console.log("📦 projectRoutes loaded");
 const { authenticate } = require("../middlewares/authMiddleware");
-// 🔐 Protected route: Create project
-router.post("/", authenticate, createProject);
 
-// 🧪 Public test route
-router.get("/", (req, res) => {
-  res.json([{ id: 1, title: "Test Project", ownerId: 123 }]);
-});
+router.get("/", authenticate, getAllProjects); // Get all projects
+
+router.post("/", authenticate, createProject); //  Create
+
+router.get("/:id", authenticate, getProjectById); //  Get single project by ID
+
+router.put("/:id", authenticate, updateProject); //  Update
+
+router.delete("/:id", authenticate, deleteProject); //  Delete
 
 module.exports = router;

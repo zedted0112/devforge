@@ -14,7 +14,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 //test
-
+app.get('/health', (req, res) => {
+  res.send('✅ project Service Healthy');
+});
 app.use("/api/projects", projectRoutes);
 
 app.use('/api/sync', syncRoutes);

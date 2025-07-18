@@ -1,9 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import useAuthStore from '../stores/authStore';
 
 const Landing: React.FC = () => {
   const navigate = useNavigate();
+  const { accessToken } = useAuthStore();
+
+  const handleLaunch = () => {
+    if (accessToken) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-slate-100 to-indigo-50 flex flex-col items-center justify-center px-6">
@@ -28,7 +38,7 @@ const Landing: React.FC = () => {
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.97 }}
-        onClick={() => navigate('/login')}
+        onClick={handleLaunch}
         className="px-6 py-3 bg-indigo-600 text-white rounded-full shadow-md hover:bg-indigo-700 transition"
       >
         Launch Command Center

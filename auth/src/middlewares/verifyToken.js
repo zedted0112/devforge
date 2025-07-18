@@ -6,7 +6,7 @@ const prisma = require("../../prisma/client"); // 📦 DB client (Prisma)
 const isDev = process.env.NODE_ENV !== "production"; // ⚙️ Toggle dev logs
 
 /**
- * 🔐 Verify JWT token and attach user to request.
+ * Verify JWT token and attach user to request.
  * - Decodes token
  * - Checks user in DB
  * - Blocks if invalid/missing

@@ -39,7 +39,7 @@ exports.signupUser = async (req, res) => {
     if(existingUser){
       return res.status(400).json({
         message:"User already exists"
-      },console.log("user already in datbase"));
+      },console.log("user already in database"));
     }
 
     
@@ -73,7 +73,9 @@ exports.signupUser = async (req, res) => {
         password: hashedPassword,
         role: "user",
       },
-    },console.log("New user created in Auth-db"));
+    },console.log("New user created in Auth-db",data));
+
+   
 
     
 

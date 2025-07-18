@@ -1,3 +1,24 @@
+Branch: frontend-ui/dashboard
+
+Summary of Changes:
+	1.	Landing Page (Landing.tsx)
+	•	Updated the “Launch” button logic.
+	•	Now intelligently checks:
+	•	If the user is logged in, redirect to Dashboard.
+	•	If not logged in, redirect to Login.
+	•	If login fails due to invalid user, offer Signup (future patch planned to make this optional).
+	2.	Login Page (Login.tsx)
+	•	Improved login handling with better error messages.
+	•	Synced Zustand store correctly after successful login.
+	•	Ensures proper redirection to Dashboard post-login.
+	3.	Axios Client (axiosClient.ts)
+	•	Updated the API base URL setup using .env (supports Docker or localhost).
+	•	Cleaner configuration for future scalability.
+	4.	.gitignore
+	•	Added common entries:
+	•	node_modules/, *.log, .DS_Store, IDE config folders like .vscode/ and .idea/
+	5.	Project Tree File (devforge_tree.txt)
+	•	Regenerated to reflect the latest folder structure across frontend and backend.
 himalayancoder@Nitins-MacBook-Air devforge % tre
 e -L 4 -I "node_modules|.git|dist|build"
 .
@@ -120,5 +141,9 @@ e -L 4 -I "node_modules|.git|dist|build"
     ├── project-service-restart.sh
     └── switch-env.sh
 
-40 directories, 79 files
-himalayancoder@Nitins-MacBook-Air devforge % 
+⸻
+
+This patch improves the overall auth flow, prepares for real backend testing, and cleans up the environment setup.
+Ready for pull request or more feature patches.
+
+⸻
