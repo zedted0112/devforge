@@ -11,7 +11,7 @@ const {
 } = require("../middlewares/validateAuthInput");
 
 // temporary test routes
-router.get("/ping", (req, res) => {
+router.get("/health", (req, res) => {
   res.send("Auth service is live");
 });
 

@@ -21,7 +21,7 @@ redisClient.on("connect", () => {
   console.log("✅ Redis connected");
 });
 
-app.get('/health', (req, res) => {
+app.get('/ping', (req, res) => {
   res.send('✅ Auth Service Healthy');
 });
 app.use("/api/auth", require("./routes/authRoutes"));

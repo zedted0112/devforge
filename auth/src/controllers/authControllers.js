@@ -73,9 +73,9 @@ exports.signupUser = async (req, res) => {
         password: hashedPassword,
         role: "user",
       },
-    },console.log("New user created in Auth-db",data));
+    });
 
-   
+    console.log("✅ New user created in Auth-db", newUser);
 
     
 
