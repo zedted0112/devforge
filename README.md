@@ -1,3 +1,9 @@
+# Branch: feat/gateway
+
+This branch is dedicated to the development of the API Gateway for DevForge. The gateway will serve as a single entry point for all frontend and external requests, handling routing, authentication, and service discovery for the modular microservices (auth, project-service, and future services).
+
+---
+
 # DevForge
 
 DevForge is a backend project management system built with Node.js microservices.  
