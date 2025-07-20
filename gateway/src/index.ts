@@ -16,6 +16,22 @@ app.use('/api/auth', createProxyMiddleware({
   logLevel: 'debug',
 }));
 
+
+
+// 🔁 Proxy /api/user → http://localhost:3002
+app.use('/api/user', createProxyMiddleware({
+  target: 'http://localhost:3002',
+  changeOrigin: true,
+  logLevel: 'debug',
+}));
+
+// 🔁 Proxy /api/sync → http://localhost:3002
+app.use('/api/sync', createProxyMiddleware({
+  target: 'http://localhost:3002',
+  changeOrigin: true,
+  logLevel: 'debug',
+}));
+
 app.listen(PORT, () => {
   console.log(`[GATEWAY] Running on port ${PORT}`);
 }); 
