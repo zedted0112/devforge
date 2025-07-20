@@ -27,6 +27,7 @@ services:
     depends_on:
       - postgres
       - redis
+    # No volume mounts — Prisma now built during image build
 
   project-service:
     build:
@@ -38,6 +39,7 @@ services:
     depends_on:
       - postgres
       - redis
+    # No volume mounts unless explicitly needed for hot reload
 
 volumes:
   pg_data:

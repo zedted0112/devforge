@@ -32,7 +32,10 @@ module.exports = app;
 if (require.main === module) {
   (async () => {
     try {
+      console.log("🔁 Connecting to Redis...");
       await redisClient.connect();
+      console.log("✅ Redis connected");
+      
       app.use((req, res, next) => {
         req.redis = redisClient;
         next();

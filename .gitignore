@@ -84,3 +84,29 @@ Thumbs.db
 # Ryo CLI specific
 .ryo-context
 .ryo-env-context
+
+docker-compose.override.yml
+**/Dockerfile
+**/docker-compose*.yml
+**/docker-init.log
+**/.dockerignore
+
+# Prisma
+**/prisma/dev.db
+**/prisma/*.sqlite
+**/prisma/migrations/
+**/src/generated/prisma/
+
+# Binaries / compiled native bindings
+*.node
+
+# Local databases or test DBs
+*.db
+*.sqlite
+
+# Coverage / test snapshots (Jest)
+*.snap
+test-results/
+
+# OS-specific
+Icon?
