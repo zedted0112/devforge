@@ -13,7 +13,7 @@ const Signup: React.FC = () => {
     e.preventDefault();
     setError(null);
     try {
-      await axiosClient.post('/auth/signup', {
+      await axiosClient.post('/api/auth/signup', {
         name,
         email,
         password,

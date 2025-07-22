@@ -25,7 +25,7 @@ app.get('/ping', (req, res) => {
   res.send('✅ Auth Service Healthy');
 });
 app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/protected", protectedRoutes);
+app.use("/api/auth/protected", protectedRoutes);
 
 module.exports = app;
 
@@ -35,7 +35,7 @@ if (require.main === module) {
       console.log("🔁 Connecting to Redis...");
       await redisClient.connect();
       console.log("✅ Redis connected");
-      
+
       app.use((req, res, next) => {
         req.redis = redisClient;
         next();

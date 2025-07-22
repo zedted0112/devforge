@@ -14,6 +14,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     setError(null);
     setLoading(true);
     try {
@@ -43,14 +44,18 @@ const Login: React.FC = () => {
         // Don't block login if sync fails, just log it
       }
 
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
 
       // TODO: redirect to /dashboard after success
     
     } catch (err: any) {
-      const errorMsg = err.response?.data?.message || 'Login failed';
+      let errorMsg = 'Login failed';
+      if (err.response?.data?.message) {
+        errorMsg = err.response.data.message;
+      } else if (err.message === 'Network Error') {
+        errorMsg = 'Cannot reach the server. Please try again later.';
+      }
       setError(errorMsg);
-      // If backend sends specific message for missing user
     } finally {
       setLoading(false);
     }
@@ -67,6 +72,8 @@ const Login: React.FC = () => {
           <input
             type="email"
             placeholder="Email"
+            aria-label="Email address"
+            autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -75,6 +82,7 @@ const Login: React.FC = () => {
           <input
             type="password"
             placeholder="Password"
+            aria-label="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required

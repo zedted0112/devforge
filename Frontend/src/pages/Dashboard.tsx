@@ -26,6 +26,7 @@ const Dashboard: React.FC = () => {
   const ensureUserSynced = async () => {
     if (userId && email) {
       try {
+        console.log('🔄 Syncing user to project service:', { id: Number(userId), email });
         await syncUser({
           id: Number(userId),
           email: email
@@ -42,8 +43,14 @@ const Dashboard: React.FC = () => {
     try {
       const response = await getProjects();
       setProjects(response.projects || []);
-    } catch (err) {
-      console.error('Error fetching projects:', err);
+    } catch (err: any) {
+      // Handle unauthorized error for token expiry
+      if (err.response?.status === 401) {
+        clearAuth();
+        navigate('/login');
+      } else {
+        console.error('Error fetching projects:', err);
+      }
     } finally {
       setLoading(false);
     }

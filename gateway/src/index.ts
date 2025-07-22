@@ -3,35 +3,33 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const isDocker = process.env.DOCKER === 'true';
 
-// 🟢 Basic health route
+const AUTH_TARGET = isDocker ? 'http://auth-service:3001' : 'http://localhost:3001';
+const PROJECT_TARGET = isDocker ? 'http://project-service:3002' : 'http://localhost:3002';
+
 app.get('/ping', (_, res) => res.send('pong'));
 
-// 🔁 Proxy /api/auth → http://auth:3001
-app.use('/api/auth', createProxyMiddleware({
-  target: 'http://localhost:3001',
-   //target: 'http://auth:3001',
-  changeOrigin: true,
- // pathRewrite: { '^/api/auth': '' },
-  logLevel: 'debug',
-}));
-
-
-
-// 🔁 Proxy /api/user → http://localhost:3002
+// Proxy to project-service
 app.use('/api/user', createProxyMiddleware({
-  target: 'http://localhost:3002',
+  target: PROJECT_TARGET,
   changeOrigin: true,
   logLevel: 'debug',
 }));
 
-// 🔁 Proxy /api/sync → http://localhost:3002
 app.use('/api/sync', createProxyMiddleware({
-  target: 'http://localhost:3002',
+  target: PROJECT_TARGET,
+  changeOrigin: true,
+  logLevel: 'debug',
+}));
+
+// Proxy for all /api/auth routes
+app.use('/api/auth', createProxyMiddleware({
+  target: AUTH_TARGET,
   changeOrigin: true,
   logLevel: 'debug',
 }));
 
 app.listen(PORT, () => {
   console.log(`[GATEWAY] Running on port ${PORT}`);
-}); 
+});

@@ -36,13 +36,13 @@ export interface SyncUserPayload {
 
 // ✅ Tell Axios the expected return shape
 export const login = async (payload: LoginPayload): Promise<LoginResponse> => {
-  const response = await axiosClient.post<LoginResponse>('/auth/login', payload);
+  const response = await axiosClient.post<LoginResponse>('/api/auth/login', payload);
   return response.data;
 };
 
 // Signup user
 export const signup = async (payload: SignupPayload): Promise<SignupResponse> => {
-  const response = await axiosClient.post<SignupResponse>('/auth/signup', payload);
+  const response = await axiosClient.post<SignupResponse>('/api/auth/signup', payload);
   return response.data;
 };
 

@@ -41,5 +41,17 @@ services:
       - redis
     # No volume mounts unless explicitly needed for hot reload
 
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+      - project-service
+    environment:
+      - DOCKER=true
+
 volumes:
   pg_data:
