@@ -14,7 +14,7 @@ const app = express();
 
 // Configure CORS properly
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || 'https://devforge-zeta.vercel.app',
+  origin: process.env.CORS_ORIGIN || 'https://devforge-lnilqboex-himalayancoders-projects-4a1f4d3a.vercel.app',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
