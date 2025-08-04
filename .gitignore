@@ -110,3 +110,27 @@ test-results/
 
 # OS-specific
 Icon?
+
+# Sensitive Documentation and Guides
+DEPLOYMENT.md
+auth/docs/
+Frontend/docs/
+project-service/docs/
+gateway/docs/
+jobs-worker/docs/
+notifications/docs/
+analytics/docs/
+
+# Backup files
+*.backup
+auth/.env.backup
+
+# Local development scripts
+scripts/auth-service-restart.sh
+scripts/project-service-restart.sh
+scripts/dev-restart.sh
+scripts/switch-env.sh
+
+# Development notes
+notes.md
+*.nd
