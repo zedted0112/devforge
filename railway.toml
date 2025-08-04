@@ -1,0 +1,22 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "echo 'This is a monorepo. Please deploy individual services:' && echo '1. Create new project with root directory: auth' && echo '2. Create new project with root directory: project-service' && echo '3. Create new project with root directory: gateway' && exit 1"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+
+[[services]]
+name = "auth-service"
+root = "auth"
+startCommand = "npm start"
+
+[[services]]
+name = "project-service" 
+root = "project-service"
+startCommand = "npm start"
+
+[[services]]
+name = "gateway"
+root = "gateway"
+startCommand = "npm start" 

@@ -1,6 +1,42 @@
 {
+  "name": "devforge",
+  "version": "1.0.0",
+  "description": "DevForge - Modern project management system with microservices architecture",
+  "main": "index.js",
+  "scripts": {
+    "start": "echo 'Please deploy individual services: auth, project-service, gateway' && exit 1",
+    "dev": "docker-compose up",
+    "test": "npm run test:auth && npm run test:project",
+    "test:auth": "cd auth && npm test",
+    "test:project": "cd project-service && npm test",
+    "build": "echo 'Building all services...' && npm run build:auth && npm run build:project && npm run build:gateway",
+    "build:auth": "cd auth && npm ci",
+    "build:project": "cd project-service && npm ci",
+    "build:gateway": "cd gateway && npm ci && npm run build",
+    "deploy:auth": "cd auth && npm start",
+    "deploy:project": "cd project-service && npm start",
+    "deploy:gateway": "cd gateway && npm start"
+  },
+  "keywords": [
+    "microservices",
+    "project-management",
+    "nodejs",
+    "react",
+    "docker"
+  ],
+  "author": "Nitin Rana",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "workspaces": [
+    "auth",
+    "project-service", 
+    "gateway",
+    "Frontend"
+  ],
   "devDependencies": {
-    "jest": "^30.0.4",
-    "supertest": "^7.1.3"
+    "docker-compose": "^1.0.0"
   }
 }
