@@ -1,0 +1,14 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "echo 'This is a monorepo. Please deploy individual services.' && exit 1"
+  },
+  "deploy": {
+    "startCommand": "echo 'Please deploy individual services:' && echo '1. Create new project with root directory: auth' && echo '2. Create new project with root directory: project-service' && echo '3. Create new project with root directory: gateway' && exit 1",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  }
+} 
