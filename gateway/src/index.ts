@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 // Configure CORS properly
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'https://devforge-lnilqboex-himalayancoders-projects-4a1f4d3a.vercel.app',
+  origin: process.env.FRONTEND_URL || 'https://devforge-zeta.vercel.app',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
