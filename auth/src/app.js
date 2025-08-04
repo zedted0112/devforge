@@ -6,7 +6,16 @@ const protectedRoutes= require("./routes/protected")
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+// Configure CORS properly
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || 'https://devforge-zeta.vercel.app',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const redisClient = redis.createClient({

@@ -1,8 +1,19 @@
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Configure CORS properly
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || 'https://devforge-zeta.vercel.app',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
+app.use(cors(corsOptions));
 
 // Use Railway internal URLs for service communication
 const AUTH_TARGET = process.env.AUTH_SERVICE_URL || 'http://auth-service.railway.internal:3001';
