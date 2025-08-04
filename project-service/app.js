@@ -25,7 +25,11 @@ app.get("/api/projects/ping", (req, res) => {
   res.send("📡 Project Service is live");
 });
 
-const PORT = process.env.PORT || 3002;
-app.listen(PORT, () => {
-  console.log(`🚀 Project service running on port ${PORT}`);
-});
+module.exports = app;
+
+if (require.main === module) {
+  const PORT = process.env.PORT || 3002;
+  app.listen(PORT, () => {
+    console.log(`🚀 Project service running on port ${PORT}`);
+  });
+}

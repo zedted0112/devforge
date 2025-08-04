@@ -24,8 +24,13 @@ redisClient.on("connect", () => {
 app.get('/ping', (req, res) => {
   res.send('✅ Auth Service Healthy');
 });
+
+app.get('/api/auth/ping', (req, res) => {
+  res.send('Auth service is live');
+});
+
 app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/auth/protected", protectedRoutes);
+app.use("/api/protected", protectedRoutes);
 
 module.exports = app;
 
