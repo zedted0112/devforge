@@ -11,6 +11,12 @@ const PROJECT_TARGET = isDocker ? 'http://project-service:3002' : 'http://localh
 app.get('/ping', (_, res) => res.send('pong'));
 
 // Proxy to project-service
+app.use('/api/projects', createProxyMiddleware({
+  target: PROJECT_TARGET,
+  changeOrigin: true,
+  logLevel: 'debug',
+}));
+
 app.use('/api/user', createProxyMiddleware({
   target: PROJECT_TARGET,
   changeOrigin: true,
