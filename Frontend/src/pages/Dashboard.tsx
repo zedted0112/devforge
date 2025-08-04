@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/authStore';
 import { getProjects, createProject, updateProject, deleteProject } from '../api/project';
 import { syncUser } from '../api/auth';
-import type { Project, ProjectsResponse } from '../types/project';
+import type { Project } from '../types/project';
 import ProjectModal from '../components/ProjectModal';
 
 const Dashboard: React.FC = () => {

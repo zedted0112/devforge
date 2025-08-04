@@ -1,57 +1,106 @@
-version: "3.8"
+version: '3.8'
 
 services:
+  # PostgreSQL Database
   postgres:
-    image: postgres:17
-    restart: always
+    image: postgres:15-alpine
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: devforge
+      POSTGRES_USER: devforge_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devforge_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-      - ./docker/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devforge_user -d devforge"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # Redis for token storage
   redis:
-    image: redis
+    image: redis:7-alpine
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # Auth Service
   auth-service:
     build:
       context: ./auth
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - PORT=3001
+      - DATABASE_URL=postgresql://devforge_user:${POSTGRES_PASSWORD:-devforge_password}@postgres:5432/devforge
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=devforge_super_secret_key
+      - REFRESH_TOKEN_SECRET=devforge_refresh_key
     ports:
       - "3001:3001"
-    env_file:
-      - ./auth/.env
     depends_on:
-      - postgres
-      - redis
-    # No volume mounts — Prisma now built during image build
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./auth:/app
+      - /app/node_modules
 
+  # Project Service
   project-service:
     build:
       context: ./project-service
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - PORT=3002
+      - DATABASE_URL=postgresql://devforge_user:${POSTGRES_PASSWORD:-devforge_password}@postgres:5432/devforge
+      - JWT_SECRET=devforge_super_secret_key
     ports:
       - "3002:3002"
-    env_file:
-      - ./project-service/.env
     depends_on:
-      - postgres
-      - redis
-    # No volume mounts unless explicitly needed for hot reload
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./project-service:/app
+      - /app/node_modules
 
+  # API Gateway
   gateway:
     build:
       context: ./gateway
       dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - PORT=3000
+      - DOCKER=true
     ports:
       - "3000:3000"
     depends_on:
       - auth-service
       - project-service
+
+  # Frontend
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
     environment:
-      - DOCKER=true
+      - VITE_API_URL=http://localhost:3000
+    ports:
+      - "5173:80"
+    depends_on:
+      - gateway
 
 volumes:
-  pg_data:
+  postgres_data:
+  redis_data:

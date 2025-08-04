@@ -1,15 +1,34 @@
-FROM node:20-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
+# Copy package files
 COPY package*.json ./
-RUN npm install
+COPY prisma ./prisma/
 
+# Install dependencies
+RUN npm ci --only=production
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Copy source code
 COPY . .
 
-# Generate Prisma Client inside image
-RUN npx prisma generate --schema=./prisma/schema.prisma
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodejs -u 1001
 
+# Change ownership
+RUN chown -R nodejs:nodejs /app
+USER nodejs
+
+# Expose port
 EXPOSE 3001
 
-CMD ["node", "src/app.js"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3001/ping', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+
+# Start the application
+CMD ["npm", "start"]
