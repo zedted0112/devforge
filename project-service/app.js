@@ -43,7 +43,7 @@ if (require.main === module) {
       console.log("🔁 Setting up project service database schema...");
       const { execSync } = require('child_process');
       try {
-        execSync('npx prisma db push', { stdio: 'inherit' });
+        execSync('npx prisma db push --accept-data-loss', { stdio: 'inherit' });
         console.log("✅ Project service database schema pushed successfully");
       } catch (pushError) {
         console.error("❌ Project service database setup failed:", pushError.message);
