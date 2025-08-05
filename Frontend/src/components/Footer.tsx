@@ -1,4 +1,5 @@
 import React from 'react';
+import logoImage from '/logo.png';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -10,7 +11,7 @@ const Footer: React.FC = () => {
           <div className="mb-4 md:mb-0">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 rounded-lg overflow-hidden">
-                <img src="/logo.png" alt="DevForge Logo" className="w-full h-full object-cover" />
+                <img src={logoImage} alt="DevForge Logo" className="w-full h-full object-cover" />
               </div>
               <span className="text-xl font-bold">DevForge</span>
             </div>

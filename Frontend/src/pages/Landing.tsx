@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import useAuthStore from '../stores/authStore';
+import logoImage from '/logo.png';
 
 const Landing: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Landing: React.FC = () => {
         transition={{ duration: 0.6 }}
         className="mb-6"
       >
-        <img src="/logo.png" alt="DevForge Logo" className="w-20 h-20 mx-auto mb-4 rounded-lg shadow-lg" />
+        <img src={logoImage} alt="DevForge Logo" className="w-20 h-20 mx-auto mb-4 rounded-lg shadow-lg" />
       </motion.div>
       
       <motion.h1
