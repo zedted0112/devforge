@@ -13,30 +13,30 @@ export interface UpdateProjectPayload {
 
 // Get all projects for the authenticated user
 export const getProjects = async (): Promise<ProjectsResponse> => {
-  const response = await projectClient.get<ProjectsResponse>('/projects');
+  const response = await projectClient.get<ProjectsResponse>('/api/projects');
   return response.data;
 };
 
 // Get a single project by ID
 export const getProject = async (id: string): Promise<{ project: Project }> => {
-  const response = await projectClient.get<{ project: Project }>(`/projects/${id}`);
+  const response = await projectClient.get<{ project: Project }>(`/api/projects/${id}`);
   return response.data;
 };
 
 // Create a new project
 export const createProject = async (payload: CreateProjectPayload): Promise<{ message: string; project: Project }> => {
-  const response = await projectClient.post<{ message: string; project: Project }>('/projects', payload);
+  const response = await projectClient.post<{ message: string; project: Project }>('/api/projects', payload);
   return response.data;
 };
 
 // Update an existing project
 export const updateProject = async (id: string, payload: UpdateProjectPayload): Promise<{ message: string; project: Project }> => {
-  const response = await projectClient.put<{ message: string; project: Project }>(`/projects/${id}`, payload);
+  const response = await projectClient.put<{ message: string; project: Project }>(`/api/projects/${id}`, payload);
   return response.data;
 };
 
 // Delete a project
 export const deleteProject = async (id: string): Promise<{ message: string }> => {
-  const response = await projectClient.delete<{ message: string }>(`/projects/${id}`);
+  const response = await projectClient.delete<{ message: string }>(`/api/projects/${id}`);
   return response.data;
 }; 

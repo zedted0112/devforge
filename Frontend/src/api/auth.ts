@@ -48,6 +48,6 @@ export const signup = async (payload: SignupPayload): Promise<SignupResponse> =>
 
 // Sync user to project service
 export const syncUser = async (payload: SyncUserPayload): Promise<{ message: string }> => {
-  const response = await projectClient.post<{ message: string }>('/sync/user', payload);
+  const response = await projectClient.post<{ message: string }>('/api/sync/user', payload);
   return response.data;
 };
