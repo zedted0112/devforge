@@ -22,8 +22,8 @@ app.use((req, res, next) => {
 });
 
 // Use Railway internal URLs for service communication (external URLs as fallback)
-const AUTH_TARGET = process.env.AUTH_SERVICE_URL || 'http://auth-service:3001';
-const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || 'http://project-service:3002';
+const AUTH_TARGET = process.env.AUTH_SERVICE_URL || 'https://auth-service.railway.internal';
+const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || 'https://project-service.railway.internal';
 
 // Health check endpoint
 app.get('/health', (_, res) => res.send('✅ Gateway Service Healthy'));
