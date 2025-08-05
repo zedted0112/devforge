@@ -22,9 +22,9 @@ app.use((req, res, next) => {
 });
 
 // Use Railway internal URLs for service communication (external URLs as fallback)
-// Railway provides internal URLs via environment variables
-const AUTH_TARGET = process.env.AUTH_SERVICE_URL || process.env.RAILWAY_AUTH_SERVICE_URL || 'https://devforge-auth-production.up.railway.app';
-const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || process.env.RAILWAY_PROJECT_SERVICE_URL || 'https://devforge-project-service-production.up.railway.app';
+// For Railway internal networking, use the service names with .railway.internal domain
+const AUTH_TARGET = process.env.AUTH_SERVICE_URL || 'https://auth-service.railway.internal';
+const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || 'https://project-service.railway.internal';
 
 // Health check endpoint
 app.get('/health', (_, res) => res.send('✅ Gateway Service Healthy'));
