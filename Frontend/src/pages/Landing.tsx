@@ -24,7 +24,7 @@ const Landing: React.FC = () => {
         className="mb-6"
       >
         <img 
-          src="/logo.png" 
+          src="/logo.png?v=2" 
           alt="DevForge Logo" 
           className="w-20 h-20 mx-auto mb-4 rounded-lg shadow-lg"
           onError={(e) => {

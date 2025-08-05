@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
           <div className="mb-4 md:mb-0">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 rounded-lg overflow-hidden">
-                <img src="/logo.png" alt="DevForge Logo" className="w-full h-full object-cover" />
+                <img src="/logo.png?v=2" alt="DevForge Logo" className="w-full h-full object-cover" />
               </div>
               <span className="text-xl font-bold">DevForge</span>
             </div>
