@@ -30,12 +30,21 @@ redisClient.on("connect", () => {
   console.log("✅ Redis connected");
 });
 
+// Health check endpoint
 app.get('/ping', (req, res) => {
+  console.log('🏥 Health check requested from:', req.get('origin') || 'unknown');
   res.send('✅ Auth Service Healthy');
 });
 
 app.get('/api/auth/ping', (req, res) => {
+  console.log('🏥 Auth ping requested from:', req.get('origin') || 'unknown');
   res.send('Auth service is live');
+});
+
+// Add request logging middleware
+app.use((req, res, next) => {
+  console.log(`📥 ${req.method} ${req.path} -> ${req.get('origin') || 'unknown'}`);
+  next();
 });
 
 app.use("/api/auth", require("./routes/authRoutes"));
