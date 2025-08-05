@@ -15,6 +15,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Add request logging
+app.use((req, res, next) => {
+  console.log(`📥 ${req.method} ${req.path} -> ${req.get('origin') || 'unknown'}`);
+  next();
+});
+
 // Use Railway internal URLs for service communication
 const AUTH_TARGET = process.env.AUTH_SERVICE_URL || 'http://auth-service.railway.internal:3001';
 const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || 'http://project-service.railway.internal:3002';
@@ -47,6 +53,15 @@ app.use('/api/auth', createProxyMiddleware({
   target: AUTH_TARGET,
   changeOrigin: true,
   logLevel: 'debug',
+  timeout: 30000, // 30 second timeout
+  proxyTimeout: 30000,
+  onError: (err, req, res) => {
+    console.error('🚨 Auth Service Proxy Error:', err.message);
+    res.status(504).json({ 
+      error: 'Auth service unavailable', 
+      message: 'The authentication service is not responding' 
+    });
+  }
 }));
 
 app.listen(PORT, () => {
