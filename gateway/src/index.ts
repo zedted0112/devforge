@@ -22,7 +22,9 @@ app.use((req, res, next) => {
 });
 
 // Use Railway internal URLs for service communication (external URLs as fallback)
-// Use external Railway URLs for service communication
+// Use external Railway URLs for reliable service-to-service communication
+// Internal URLs (http://auth-service:3001) don't work reliably in Railway
+// These external URLs are automatically provided by Railway and are more stable
 const AUTH_TARGET = process.env.AUTH_SERVICE_URL || 'https://devforge-auth-production.up.railway.app';
 const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || 'https://devforge-project-service-production.up.railway.app';
 

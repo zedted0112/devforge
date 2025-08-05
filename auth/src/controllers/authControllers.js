@@ -140,11 +140,14 @@ exports.loginUser = async (req, res) => {
     console.log("✅ Login successful, tokens issued");
 
     // 🛰 Sync to project-service
+    // Use external Railway URL for reliable service-to-service communication
+    // Internal URLs (http://project-service:3002) don't work reliably in Railway
     try {
-      const syncUrl = "http://project-service:3002/api/sync/user";
-      console.log("📡 Syncing to Project Service:", syncUrl);
+      const syncUrl = process.env.PROJECT_SERVICE_URL || "https://devforge-project-service-production.up.railway.app";
+      const fullSyncUrl = `${syncUrl}/api/sync/user`;
+      console.log("📡 Syncing to Project Service:", fullSyncUrl);
 
-      const syncResponse = await axios.post(syncUrl,
+      const syncResponse = await axios.post(fullSyncUrl,
         { id: user.id, email: user.email },
         {
           headers: {
