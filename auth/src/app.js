@@ -59,20 +59,15 @@ if (require.main === module) {
       await redisClient.connect();
       console.log("✅ Redis connected");
 
-      // Run database migrations on startup
-      console.log("🔁 Running database migrations...");
+      // Run database schema push on startup (more reliable than migrations)
+      console.log("🔁 Setting up database schema...");
       const { execSync } = require('child_process');
       try {
-        execSync('npx prisma migrate deploy', { stdio: 'inherit' });
-        console.log("✅ Database migrations completed");
-      } catch (migrationError) {
-        console.error("⚠️ Migration failed, trying db push...");
-        try {
-          execSync('npx prisma db push', { stdio: 'inherit' });
-          console.log("✅ Database schema pushed");
-        } catch (pushError) {
-          console.error("❌ Database setup failed:", pushError.message);
-        }
+        execSync('npx prisma db push', { stdio: 'inherit' });
+        console.log("✅ Database schema pushed successfully");
+      } catch (pushError) {
+        console.error("❌ Database setup failed:", pushError.message);
+        console.error("❌ Full error:", pushError);
       }
 
       app.use((req, res, next) => {
