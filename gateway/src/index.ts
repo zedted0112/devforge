@@ -21,9 +21,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Use Railway URLs for service communication (external URLs as fallback)
-const AUTH_TARGET = process.env.AUTH_SERVICE_URL || 'https://devforge-auth-production.up.railway.app';
-const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || 'https://devforge-project-service-production.up.railway.app';
+// Use Railway internal URLs for service communication (external URLs as fallback)
+// Railway provides internal URLs via environment variables
+const AUTH_TARGET = process.env.AUTH_SERVICE_URL || process.env.RAILWAY_AUTH_SERVICE_URL || 'https://devforge-auth-production.up.railway.app';
+const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || process.env.RAILWAY_PROJECT_SERVICE_URL || 'https://devforge-project-service-production.up.railway.app';
 
 // Health check endpoint
 app.get('/health', (_, res) => res.send('✅ Gateway Service Healthy'));
