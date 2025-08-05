@@ -16,10 +16,9 @@ const redisClient = require("../config/db");
 
 
 // ─────────────── Signup ───────────────
- console.log("user is being signed up");
 exports.signupUser = async (req, res) => {
   try {
-    console.log("📥 Incoming signup:", req.body);
+    // console.log("📥 Incoming signup:", req.body);
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -39,18 +38,17 @@ exports.signupUser = async (req, res) => {
     if(existingUser){
       return res.status(400).json({
         message:"User already exists"
-      },console.log("user already in database"));
+      });
     }
 
     
 
 
 
-    console.log("🔐 Hashing password...");
-    // password hashing
+    // console.log("🔐 Hashing password...");
+    // Password hashing
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    console.log("✅ Password hashed succesfully");
+    // console.log("✅ Password hashed succesfully");
 
     //old logic for temp temp adding a new user
     // const newUser = {
@@ -75,7 +73,7 @@ exports.signupUser = async (req, res) => {
       },
     });
 
-    console.log("✅ New user created in Auth-db", newUser);
+    // console.log("✅ New user created in Auth-db", newUser);
 
     
 
@@ -102,7 +100,7 @@ exports.signupUser = async (req, res) => {
 // ─────────────── Login ───────────────
 
 exports.loginUser = async (req, res) => {
-  console.log("📥 Incoming login:", req.body);
+      // console.log("📥 Incoming login:", req.body);
 
   try {
     const { email, password } = req.body;
@@ -112,32 +110,32 @@ exports.loginUser = async (req, res) => {
     });
 
     if (!user) {
-      console.log("❌ User not found in Auth DB");
+      // console.log("❌ User not found in Auth DB");
       return res.status(400).json({ message: "Invalid user. Please sign up." });
     }
 
-    console.log("✅ User found:", { id: user.id, email: user.email });
+    // console.log("✅ User found:", { id: user.id, email: user.email });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.log("❌ Password mismatch");
+      // console.log("❌ Password mismatch");
       return res.status(400).json({ message: "Invalid password" });
     }
 
-    console.log("🔐 Password matched");
+    // console.log("🔐 Password matched");
 
     const payload = { id: user.id, email: user.email, role: user.role };
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
-    console.log("🔑 Access Token:", accessToken);
-    console.log("🔄 Refresh Token:", refreshToken);
+    // console.log("🔑 Access Token:", accessToken);
+    // console.log("🔄 Refresh Token:", refreshToken);
 
     await redisClient.set(`refresh:${user.id}`, refreshToken, {
       EX: 7 * 24 * 60 * 60,
     });
 
-    console.log("✅ Login successful, tokens issued");
+    // console.log("✅ Login successful, tokens issued");
 
     // 🛰 Sync to project-service
     // Use external Railway URL for reliable service-to-service communication
@@ -145,7 +143,7 @@ exports.loginUser = async (req, res) => {
     try {
       const syncUrl = process.env.PROJECT_SERVICE_URL || "https://devforge-project-service-production.up.railway.app";
       const fullSyncUrl = `${syncUrl}/api/sync/user`;
-      console.log("📡 Syncing to Project Service:", fullSyncUrl);
+      // console.log("📡 Syncing to Project Service:", fullSyncUrl);
 
       const syncResponse = await axios.post(fullSyncUrl,
         { id: user.id, email: user.email },
@@ -156,7 +154,7 @@ exports.loginUser = async (req, res) => {
         }
       );
 
-      console.log("📬 Sync response from project:", syncResponse.data);
+      // console.log("📬 Sync response from project:", syncResponse.data);
     } catch (err) {
       console.error("⚠️ User sync to project-service failed (login):", err.message);
     }

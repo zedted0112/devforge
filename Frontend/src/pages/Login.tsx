@@ -29,8 +29,8 @@ const Login: React.FC = () => {
       // Ensure token is in localStorage before calling syncUser
       localStorage.setItem('accessToken', data.accessToken);
 
-      console.log('Logged in:', data.user.email);
-      console.log(' Token:', data.accessToken);
+      // console.log('Logged in:', data.user.email);
+      // console.log(' Token:', data.accessToken);
       
       // Sync user to project service
       try {
@@ -38,15 +38,15 @@ const Login: React.FC = () => {
           id: data.user.id,
           email: data.user.email
         });
-        console.log('User synced to project service');
+        // console.log('User synced to project service');
       } catch (syncErr: any) {
-        console.warn('Failed to sync user to project service:', syncErr);
+        // console.warn('Failed to sync user to project service:', syncErr);
         // Don't block login if sync fails, just log it
       }
 
       navigate('/dashboard', { replace: true });
 
-      // TODO: redirect to /dashboard after success
+      // Redirect to dashboard after success
     
     } catch (err: any) {
       let errorMsg = 'Login failed';

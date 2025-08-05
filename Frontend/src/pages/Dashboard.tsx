@@ -16,6 +16,7 @@ const Dashboard: React.FC = () => {
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const username = email ? email.split('@')[0] : 'User';
 
   const handleLogout = () => {
@@ -26,14 +27,14 @@ const Dashboard: React.FC = () => {
   const ensureUserSynced = async () => {
     if (userId && email) {
       try {
-        console.log('🔄 Syncing user to project service:', { id: Number(userId), email });
+        // console.log('🔄 Syncing user to project service:', { id: Number(userId), email });
         await syncUser({
           id: Number(userId),
           email: email
         });
-        console.log('User synced to project service');
+        // console.log('User synced to project service');
       } catch (syncErr: any) {
-        console.warn('Failed to sync user to project service:', syncErr);
+        // console.warn('Failed to sync user to project service:', syncErr);
         // Don't block dashboard if sync fails, just log it
       }
     }
@@ -49,7 +50,7 @@ const Dashboard: React.FC = () => {
         clearAuth();
         navigate('/login');
       } else {
-        console.error('Error fetching projects:', err);
+        // console.error('Error fetching projects:', err);
       }
     } finally {
       setLoading(false);
@@ -118,32 +119,32 @@ const Dashboard: React.FC = () => {
 
   const renderOverview = () => (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="bg-blue-50 border border-blue-200 p-4 md:p-6 rounded-xl">
           <h3 className="text-sm font-medium text-blue-700">Total Projects</h3>
-          <p className="text-3xl font-bold text-blue-700">{projects.length}</p>
+          <p className="text-2xl md:text-3xl font-bold text-blue-700">{projects.length}</p>
           <p className="text-sm text-green-600">+12% from last month</p>
         </div>
-        <div className="bg-green-50 border border-green-200 p-6 rounded-xl">
+        <div className="bg-green-50 border border-green-200 p-4 md:p-6 rounded-xl">
           <h3 className="text-sm font-medium text-green-700">Active Users</h3>
-          <p className="text-3xl font-bold text-green-700">1,234</p>
+          <p className="text-2xl md:text-3xl font-bold text-green-700">1,234</p>
           <p className="text-sm text-green-600">+5% from yesterday</p>
         </div>
-        <div className="bg-yellow-50 border border-yellow-200 p-6 rounded-xl">
+        <div className="bg-yellow-50 border border-yellow-200 p-4 md:p-6 rounded-xl">
           <h3 className="text-sm font-medium text-yellow-700">System Health</h3>
-          <p className="text-3xl font-bold text-yellow-700">99.9%</p>
+          <p className="text-2xl md:text-3xl font-bold text-yellow-700">99.9%</p>
           <p className="text-sm text-green-600">All systems operational</p>
         </div>
-        <div className="bg-purple-50 border border-purple-200 p-6 rounded-xl">
+        <div className="bg-purple-50 border border-purple-200 p-4 md:p-6 rounded-xl">
           <h3 className="text-sm font-medium text-purple-700">Response Time</h3>
-          <p className="text-3xl font-bold text-purple-700">125ms</p>
+          <p className="text-2xl md:text-3xl font-bold text-purple-700">125ms</p>
           <p className="text-sm text-gray-600">+2ms from average</p>
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 md:p-6 border border-blue-200">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           {[
             { label: 'New Project', icon: '➕', action: openCreateModal },
             { label: 'Import Data', icon: '📥', action: () => alert('Import Data feature coming soon!') },
@@ -153,10 +154,10 @@ const Dashboard: React.FC = () => {
             <button
               key={action.label}
               onClick={action.action}
-              className="p-4 bg-white rounded-lg border hover:shadow-md transition-all duration-200 hover:scale-105"
+              className="p-3 md:p-4 bg-white rounded-lg border hover:shadow-md transition-all duration-200 hover:scale-105"
             >
-              <div className="text-2xl mb-2">{action.icon}</div>
-              <div className="text-sm font-medium text-gray-700">{action.label}</div>
+              <div className="text-xl md:text-2xl mb-1 md:mb-2">{action.icon}</div>
+              <div className="text-xs md:text-sm font-medium text-gray-700">{action.label}</div>
             </button>
           ))}
         </div>
@@ -166,11 +167,11 @@ const Dashboard: React.FC = () => {
 
   const renderProjects = () => (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-gray-800">Your Projects</h2>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+        <h2 className="text-xl md:text-2xl font-semibold text-gray-800">Your Projects</h2>
         <button 
           onClick={openCreateModal}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
           + New Project
         </button>
@@ -194,32 +195,32 @@ const Dashboard: React.FC = () => {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {projects.map((project) => (
-            <div key={project.id} className="bg-white rounded-xl border p-6 hover:shadow-lg transition-all duration-200 hover:scale-105">
-              <div className="flex items-start justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">{project.title}</h3>
-                <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
+            <div key={project.id} className="bg-white rounded-xl border p-4 md:p-6 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <div className="flex items-start justify-between mb-3 md:mb-4">
+                <h3 className="text-base md:text-lg font-semibold text-gray-800 flex-1 mr-2">{project.title}</h3>
+                <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full flex-shrink-0">
                   Active
                 </span>
               </div>
-              <p className="text-gray-600 text-sm mb-4">
+              <p className="text-gray-600 text-sm mb-3 md:mb-4">
                 {project.description || 'No description available'}
               </p>
-              <div className="flex items-center justify-between text-xs text-gray-500">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-gray-500 space-y-2 sm:space-y-0">
                 <span>Created {new Date(project.createdAt).toLocaleDateString()}</span>
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => openEditModal(project)}
                     disabled={actionLoading === `edit-${project.id}`}
-                    className="text-blue-600 hover:text-blue-800 disabled:opacity-50"
+                    className="text-blue-600 hover:text-blue-800 disabled:opacity-50 px-2 py-1 rounded"
                   >
                     Edit
                   </button>
                   <button 
                     onClick={() => handleDeleteProject(project.id.toString())}
                     disabled={actionLoading === `delete-${project.id}`}
-                    className="text-red-600 hover:text-red-800 disabled:opacity-50"
+                    className="text-red-600 hover:text-red-800 disabled:opacity-50 px-2 py-1 rounded"
                   >
                     {actionLoading === `delete-${project.id}` ? 'Deleting...' : 'Delete'}
                   </button>
@@ -327,17 +328,38 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-50">
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Enhanced Sidebar */}
-      <aside className="w-64 bg-white shadow-lg hidden md:block">
+      <aside className={`fixed md:relative inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}>
         <div className="p-6 border-b">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">D</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">D</span>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-gray-800">DevForge</h1>
+                <p className="text-xs text-gray-500">Development Platform</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-800">DevForge</h1>
-              <p className="text-xs text-gray-500">Development Platform</p>
-            </div>
+            {/* Mobile close button */}
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+            >
+              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -385,17 +407,28 @@ const Dashboard: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
-        <div className="p-8">
+        <div className="p-4 md:p-8">
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-3xl font-bold text-gray-800">
-                  Welcome back, {username}! 👋
-                </h2>
-                <p className="text-gray-600 mt-1">
-                  Here's what's happening with your DevForge platform today.
-                </p>
+              <div className="flex items-center space-x-4">
+                {/* Mobile hamburger menu */}
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+                >
+                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+                    Welcome back, {username}! 👋
+                  </h2>
+                  <p className="text-gray-600 mt-1 text-sm md:text-base">
+                    Here's what's happening with your DevForge platform today.
+                  </p>
+                </div>
               </div>
               <div className="flex items-center space-x-4">
                 <div className="text-right">

@@ -5,11 +5,11 @@ const redisClient =redis.createClient({
 });
 
 redisClient.on('connect',() =>{
-    console.log('Redis connected');
+    // console.log('Redis connected');
 });
 
 redisClient.on('error',(err) =>{
-    console.error('Redis error:err');
+    console.error('Redis connection error:', err);
 });
 redisClient.connect();
 module.exports=redisClient;
