@@ -37,8 +37,26 @@ app.get("/api/projects/ping", (req, res) => {
 module.exports = app;
 
 if (require.main === module) {
-  const PORT = process.env.PORT || 3002;
-  app.listen(PORT, () => {
-    console.log(`🚀 Project service running on port ${PORT}`);
-  });
+  (async () => {
+    try {
+      // Run database schema push on startup (more reliable than migrations)
+      console.log("🔁 Setting up project service database schema...");
+      const { execSync } = require('child_process');
+      try {
+        execSync('npx prisma db push', { stdio: 'inherit' });
+        console.log("✅ Project service database schema pushed successfully");
+      } catch (pushError) {
+        console.error("❌ Project service database setup failed:", pushError.message);
+        console.error("❌ Full error:", pushError);
+      }
+
+      const PORT = process.env.PORT || 3002;
+      app.listen(PORT, () => {
+        console.log(`🚀 Project service running on port ${PORT}`);
+      });
+    } catch (err) {
+      console.error("🔥 Failed to start project service:", err);
+      process.exit(1);
+    }
+  })();
 }
