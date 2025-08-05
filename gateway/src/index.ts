@@ -21,9 +21,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Use Railway URLs for service communication (external URLs as fallback)
-const AUTH_TARGET = process.env.AUTH_SERVICE_URL || 'https://devforge-auth-production.up.railway.app';
-const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || 'https://devforge-project-service-production.up.railway.app';
+// Use Railway internal URLs for service communication (external URLs as fallback)
+const AUTH_TARGET = process.env.AUTH_SERVICE_URL || 'http://auth-service:3001';
+const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || 'http://project-service:3002';
 
 // Health check endpoint
 app.get('/health', (_, res) => res.send('✅ Gateway Service Healthy'));
@@ -34,18 +34,39 @@ app.use('/api/projects', createProxyMiddleware({
   target: PROJECT_TARGET,
   changeOrigin: true,
   logLevel: 'debug',
+  onError: (err, req, res) => {
+    console.error('🚨 Project Service Proxy Error:', err.message);
+    res.status(504).json({ 
+      error: 'Project service unavailable', 
+      message: 'The project service is not responding' 
+    });
+  }
 }));
 
 app.use('/api/user', createProxyMiddleware({
   target: PROJECT_TARGET,
   changeOrigin: true,
   logLevel: 'debug',
+  onError: (err, req, res) => {
+    console.error('🚨 Project Service Proxy Error:', err.message);
+    res.status(504).json({ 
+      error: 'Project service unavailable', 
+      message: 'The project service is not responding' 
+    });
+  }
 }));
 
 app.use('/api/sync', createProxyMiddleware({
   target: PROJECT_TARGET,
   changeOrigin: true,
   logLevel: 'debug',
+  onError: (err, req, res) => {
+    console.error('🚨 Project Service Proxy Error:', err.message);
+    res.status(504).json({ 
+      error: 'Project service unavailable', 
+      message: 'The project service is not responding' 
+    });
+  }
 }));
 
 // Proxy for all /api/auth routes
@@ -68,4 +89,5 @@ app.listen(PORT, () => {
   console.log(`🚀 Gateway service running on port ${PORT}`);
   console.log(`📡 Auth Service: ${AUTH_TARGET}`);
   console.log(`📡 Project Service: ${PROJECT_TARGET}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
