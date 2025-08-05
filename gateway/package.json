@@ -1,6 +1,11 @@
 {
   "name": "gateway",
   "version": "1.0.0",
+  "description": "DevForge Gateway Service - API Gateway microservice",
+  "author": "HimalayanCoder (Nitin Rana)",
+  "license": "UNLICENSED",
+  "private": true,
+  "copyright": "© 2024 HimalayanCoder (Nitin Rana). All Rights Reserved.",
   "main": "src/index.ts",
   "engines": {
     "node": ">=18.0.0",

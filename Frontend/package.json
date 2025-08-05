@@ -1,7 +1,11 @@
 {
-  "name": "frontend",
+  "name": "devforge-frontend",
   "private": true,
   "version": "0.0.0",
+  "description": "DevForge Frontend - Modern React application",
+  "author": "HimalayanCoder (Nitin Rana)",
+  "license": "UNLICENSED",
+  "copyright": "© 2024 HimalayanCoder (Nitin Rana). All Rights Reserved.",
   "type": "module",
   "scripts": {
     "dev": "vite",

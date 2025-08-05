@@ -1,7 +1,11 @@
 # DevForge
 
+**© 2024 HimalayanCoder (Nitin Rana). All Rights Reserved.**
+
 DevForge is a modern project management system built with microservices architecture.  
 It features a React frontend, Node.js backend services, and comprehensive CI/CD pipeline for production deployment.
+
+> **Legal Notice**: This software is proprietary and confidential. Unauthorized copying, distribution, or modification is strictly prohibited. See [COPYRIGHT.md](./COPYRIGHT.md) for full terms.
 
 ---
 

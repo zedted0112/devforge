@@ -24,8 +24,10 @@
     "react",
     "docker"
   ],
-  "author": "Nitin Rana",
-  "license": "MIT",
+  "author": "HimalayanCoder (Nitin Rana)",
+  "license": "UNLICENSED",
+  "private": true,
+  "copyright": "© 2024 HimalayanCoder (Nitin Rana). All Rights Reserved.",
   "engines": {
     "node": ">=22.12.0",
     "npm": ">=10.0.0"

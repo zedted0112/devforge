@@ -11,10 +11,12 @@
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": ["auth", "authentication", "jwt", "microservice"],
+  "author": "HimalayanCoder (Nitin Rana)",
+  "license": "UNLICENSED",
+  "private": true,
+  "copyright": "© 2024 HimalayanCoder (Nitin Rana). All Rights Reserved.",
+  "description": "DevForge Authentication Service - JWT-based authentication microservice",
   "dependencies": {
     "@prisma/client": "^6.11.1",
     "axios": "^1.10.0",

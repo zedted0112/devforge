@@ -1,8 +1,12 @@
 {
   "name": "project-service",
   "version": "1.0.0",
-  "description": "",
+  "description": "DevForge Project Service - Project management microservice",
   "main": "index.js",
+  "author": "HimalayanCoder (Nitin Rana)",
+  "license": "UNLICENSED",
+  "private": true,
+  "copyright": "© 2024 HimalayanCoder (Nitin Rana). All Rights Reserved.",
   "scripts": {
     "dev": "nodemon app.js",
     "start": "node app.js",
@@ -13,9 +17,7 @@
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["projects", "management", "microservice", "crud"],
   "type": "commonjs",
   "dependencies": {
     "@prisma/client": "^6.11.1",

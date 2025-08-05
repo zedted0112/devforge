@@ -17,10 +17,19 @@ const Landing: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-slate-100 to-indigo-50 flex flex-col items-center justify-center px-6">
-      <motion.h1
+      <motion.div
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
+        className="mb-6"
+      >
+        <img src="/logo.png" alt="DevForge Logo" className="w-20 h-20 mx-auto mb-4 rounded-lg shadow-lg" />
+      </motion.div>
+      
+      <motion.h1
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
         className="text-5xl font-extrabold text-indigo-700 tracking-tight mb-4 text-center"
       >
         Welcome to <span className="text-black">DevForge</span>

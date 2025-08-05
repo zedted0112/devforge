@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute';
+import Footer from './components/Footer';
 
 // Lazy load components for better performance
 const Landing = lazy(() => import('./pages/Landing'));
@@ -17,23 +18,26 @@ const LoadingSpinner = () => (
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
-      <Suspense fallback={<LoadingSpinner />}>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-          <Route path="*" element={<div className="p-8 text-center text-red-500">404 Not Found</div>} />
-        </Routes>
-      </Suspense>
+    <div className="min-h-screen bg-gray-50 text-gray-800 flex flex-col">
+      <div className="flex-1">
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route path="*" element={<div className="p-8 text-center text-red-500">404 Not Found</div>} />
+          </Routes>
+        </Suspense>
+      </div>
+      <Footer />
     </div>
   );
 };
