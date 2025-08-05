@@ -134,3 +134,6 @@ scripts/switch-env.sh
 # Development notes
 notes.md
 *.nd
+
+# Learning and Documentation
+Learnings/
