@@ -5,7 +5,6 @@ import { getProjects, createProject, updateProject, deleteProject } from '../api
 import { syncUser } from '../api/auth';
 import type { Project } from '../types/project';
 import ProjectModal from '../components/ProjectModal';
-import logoImage from '/logo.png';
 
 const Dashboard: React.FC = () => {
   const { email, accessToken, clearAuth, userId } = useAuthStore();
@@ -345,7 +344,7 @@ const Dashboard: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-lg overflow-hidden">
-                <img src={logoImage} alt="DevForge Logo" className="w-full h-full object-cover" />
+                <img src="/logo.png" alt="DevForge Logo" className="w-full h-full object-cover" />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-800">DevForge</h1>
