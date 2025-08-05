@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const projectClient = axios.create({
-    baseURL: import.meta.env.VITE_PROJECT_API_URL || 'http://localhost:3002/api',
+    baseURL: import.meta.env.VITE_PROJECT_API_URL || 'http://localhost:3002',
     headers: {
         'content-type': 'application/json',
     }
