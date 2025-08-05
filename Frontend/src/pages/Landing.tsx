@@ -23,7 +23,16 @@ const Landing: React.FC = () => {
         transition={{ duration: 0.6 }}
         className="mb-6"
       >
-        <img src="/logo.png" alt="DevForge Logo" className="w-20 h-20 mx-auto mb-4 rounded-lg shadow-lg" />
+        <img 
+          src="/logo.png" 
+          alt="DevForge Logo" 
+          className="w-20 h-20 mx-auto mb-4 rounded-lg shadow-lg"
+          onError={(e) => {
+            console.error('Logo failed to load:', e);
+            e.currentTarget.style.display = 'none';
+          }}
+          onLoad={() => console.log('Logo loaded successfully')}
+        />
       </motion.div>
       
       <motion.h1
