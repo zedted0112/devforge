@@ -2,6 +2,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const crypto = require("crypto");
 const prisma = require("../../prisma/client")
 const {
   generateAccessToken,
@@ -223,4 +224,167 @@ exports.refreshTokenHandler = async (req, res) => {
     accessToken: newAccessToken,
     refreshToken: newRefreshToken,
   });
+};
+
+// ─────────────── Forgot Password ───────────────
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    // Check if user exists
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      // Don't reveal if user exists or not for security
+      return res.status(200).json({ 
+        message: "If an account with that email exists, a password reset link has been sent." 
+      });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetPasswordToken = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex');
+
+    // Set expiration (1 hour from now)
+    const resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000);
+
+    // Save token to database
+    await prisma.user.update({
+      where: { email },
+      data: {
+        resetPasswordToken,
+        resetPasswordExpires,
+      },
+    });
+
+    // In a real application, you would send an email here
+    // For now, we'll return the token in the response (for testing)
+    // In production, this should be sent via email
+    
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password?token=${resetToken}`;
+    
+    console.log('🔐 Password reset link generated:', resetUrl);
+
+    return res.status(200).json({
+      message: "If an account with that email exists, a password reset link has been sent.",
+      resetUrl, // Remove this in production
+      resetToken, // Remove this in production
+    });
+
+  } catch (err) {
+    console.error("❌ Forgot password error:", err);
+    return res.status(500).json({ message: "Server error during password reset request" });
+  }
+};
+
+// ─────────────── Reset Password ───────────────
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      return res.status(400).json({ message: "Token and new password are required" });
+    }
+
+    // Hash the token to compare with stored hash
+    const resetPasswordToken = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex');
+
+    // Find user with this token
+    const user = await prisma.user.findFirst({
+      where: {
+        resetPasswordToken,
+        resetPasswordExpires: {
+          gt: new Date(),
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired reset token" });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update user's password and clear reset token
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        resetPasswordToken: null,
+        resetPasswordExpires: null,
+      },
+    });
+
+    // Clear any existing refresh tokens for this user
+    await redisClient.del(`refresh:${user.id}`);
+
+    console.log('✅ Password reset successful for user:', user.email);
+
+    return res.status(200).json({
+      message: "Password has been reset successfully. You can now login with your new password.",
+    });
+
+  } catch (err) {
+    console.error("❌ Reset password error:", err);
+    return res.status(500).json({ message: "Server error during password reset" });
+  }
+};
+
+// ─────────────── Validate Reset Token ───────────────
+exports.validateResetToken = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    if (!token) {
+      return res.status(400).json({ message: "Token is required" });
+    }
+
+    // Hash the token to compare with stored hash
+    const resetPasswordToken = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex');
+
+    // Find user with this token
+    const user = await prisma.user.findFirst({
+      where: {
+        resetPasswordToken,
+        resetPasswordExpires: {
+          gt: new Date(),
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ 
+        valid: false,
+        message: "Invalid or expired reset token" 
+      });
+    }
+
+    return res.status(200).json({
+      valid: true,
+      message: "Token is valid",
+    });
+
+  } catch (err) {
+    console.error("❌ Validate reset token error:", err);
+    return res.status(500).json({ 
+      valid: false,
+      message: "Server error during token validation" 
+    });
+  }
 };
