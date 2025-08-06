@@ -26,7 +26,7 @@ const Landing: React.FC = () => {
         <img 
           src="/logo.png?v=2" 
           alt="DevForge Logo" 
-          className="w-20 h-20 mx-auto mb-4 rounded-lg shadow-lg"
+          className="w-32 h-32 md:w-40 md:h-40 mx-auto mb-6"
           onError={(e) => {
             console.error('Logo failed to load:', e);
             e.currentTarget.style.display = 'none';

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+    baseURL: (window as any).DEVFORGE_API_URL || import.meta.env.VITE_API_URL || '',
     headers: {
         'content-type': 'application/json',
     }
@@ -33,7 +33,7 @@ axiosClient.interceptors.response.use(
             try {
                 const refreshToken = localStorage.getItem('refreshToken');
                 if (refreshToken) {
-                    const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/auth/refresh`, {
+                    const response = await axios.post(`${(window as any).DEVFORGE_API_URL || import.meta.env.VITE_API_URL || ''}/api/auth/refresh`, {
                         refreshToken
                     });
                     
@@ -56,4 +56,4 @@ axiosClient.interceptors.response.use(
     }
 );
 
-export default axiosClient;
+export default axiosClient; 

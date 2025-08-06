@@ -343,8 +343,8 @@ const Dashboard: React.FC = () => {
         <div className="p-6 border-b">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-lg overflow-hidden">
-                <img src="/logo.png?v=2" alt="DevForge Logo" className="w-full h-full object-cover" />
+              <div className="w-12 h-12">
+                <img src="/logo.png?v=2" alt="DevForge Logo" className="w-full h-full object-contain" />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-800">DevForge</h1>

@@ -37,6 +37,8 @@ services:
     build:
       context: ./auth
       dockerfile: Dockerfile
+      cache_from:
+        - node:18-alpine
     environment:
       - NODE_ENV=${NODE_ENV:-development}
       - PORT=3001
@@ -44,6 +46,7 @@ services:
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET=devforge_super_secret_key
       - REFRESH_TOKEN_SECRET=devforge_refresh_key
+      - CORS_ORIGIN=http://localhost:5173
     ports:
       - "3001:3001"
     depends_on:
@@ -60,11 +63,14 @@ services:
     build:
       context: ./project-service
       dockerfile: Dockerfile
+      cache_from:
+        - node:18-alpine
     environment:
       - NODE_ENV=${NODE_ENV:-development}
       - PORT=3002
       - DATABASE_URL=postgresql://devforge_user:${POSTGRES_PASSWORD:-devforge_password}@postgres:5432/devforge
       - JWT_SECRET=devforge_super_secret_key
+      - CORS_ORIGIN=http://localhost:5173
     ports:
       - "3002:3002"
     depends_on:
@@ -83,6 +89,9 @@ services:
       - NODE_ENV=${NODE_ENV:-development}
       - PORT=3000
       - DOCKER=true
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - PROJECT_SERVICE_URL=http://project-service:3002
+      - FRONTEND_URL=http://localhost:5173
     ports:
       - "3000:3000"
     depends_on:
@@ -94,6 +103,8 @@ services:
     build:
       context: ./Frontend
       dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:3000
     environment:
       - VITE_API_URL=http://localhost:3000
     ports:

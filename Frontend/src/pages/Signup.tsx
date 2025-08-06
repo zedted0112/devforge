@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axiosClient from '../api/axiosClient';
+import axiosClient from '../api/httpClient';
 import { useNavigate } from 'react-router-dom';
 
 const Signup: React.FC = () => {

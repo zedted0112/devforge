@@ -7,10 +7,19 @@ const PORT = process.env.PORT || 3000;
 
 // Configure CORS properly
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'https://devforge-zeta.vercel.app',
+  origin: process.env.NODE_ENV === 'production' 
+    ? (process.env.FRONTEND_URL || 'https://devforge-zeta.vercel.app')
+    : [
+        'http://localhost:5173', 
+        'http://localhost:5174', 
+        'http://localhost:3000',
+        'http://localhost:80',
+        'http://127.0.0.1:5173',
+        'http://127.0.0.1:80'
+      ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Origin', 'Accept']
 };
 
 app.use(cors(corsOptions));
@@ -21,12 +30,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Use Railway internal URLs for service communication (external URLs as fallback)
-// Use external Railway URLs for reliable service-to-service communication
-// Internal URLs (http://auth-service:3001) don't work reliably in Railway
-// These external URLs are automatically provided by Railway and are more stable
-const AUTH_TARGET = process.env.AUTH_SERVICE_URL || 'https://devforge-auth-production.up.railway.app';
-const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || 'https://devforge-project-service-production.up.railway.app';
+// Environment-based service URLs
+const AUTH_TARGET = process.env.AUTH_SERVICE_URL || (process.env.NODE_ENV === 'production' 
+  ? 'https://devforge-auth-production.up.railway.app' 
+  : 'http://localhost:3001');
+const PROJECT_TARGET = process.env.PROJECT_SERVICE_URL || (process.env.NODE_ENV === 'production' 
+  ? 'https://devforge-project-service-production.up.railway.app' 
+  : 'http://localhost:3002');
 
 // Health check endpoint
 app.get('/health', (_, res) => res.send('✅ Gateway Service Healthy'));

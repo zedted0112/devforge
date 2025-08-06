@@ -22,17 +22,20 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-//test
+
+// Public health endpoints (no authentication required)
 app.get('/health', (req, res) => {
   res.send('✅ project Service Healthy');
 });
-app.use("/api/projects", projectRoutes);
 
-app.use('/api/sync', syncRoutes);
-app.use('/api/user', userRoutes);
 app.get("/api/projects/ping", (req, res) => {
   res.send("📡 Project Service is live");
 });
+
+// Protected routes (authentication required)
+app.use("/api/projects", projectRoutes);
+app.use('/api/sync', syncRoutes);
+app.use('/api/user', userRoutes);
 
 module.exports = app;
 

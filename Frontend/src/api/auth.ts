@@ -1,4 +1,4 @@
-import axiosClient from './axiosClient';
+import axiosClient from './httpClient';
 import projectClient from './projectClient';
 
 interface LoginPayload {
