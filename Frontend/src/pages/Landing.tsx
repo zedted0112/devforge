@@ -17,23 +17,7 @@ const Landing: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-slate-100 to-indigo-50 flex flex-col items-center justify-center px-6">
-      <motion.div
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="mb-6"
-      >
-        <img 
-          src="/logo.png?v=2" 
-          alt="DevForge Logo" 
-          className="w-20 h-20 mx-auto mb-4 rounded-lg shadow-lg"
-          onError={(e) => {
-            console.error('Logo failed to load:', e);
-            e.currentTarget.style.display = 'none';
-          }}
-          onLoad={() => console.log('Logo loaded successfully')}
-        />
-      </motion.div>
+
       
       <motion.h1
         initial={{ opacity: 0, y: -30 }}
